@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "postMessage Spy",
+  "version": "1.0.0",
+  "description": "Logs window.postMessage traffic on in-scope targets and flags token/origin issues. For authorized security testing only.",
+  "permissions": ["storage", "sidePanel", "scripting", "tabs"],
+  "optional_host_permissions": ["*://*/*"],
+  "background": { "service_worker": "background.js" },
+  "side_panel": { "default_path": "panel.html" },
+  "action": { "default_title": "postMessage Spy (open side panel)" },
+  "options_page": "options.html",
+  "icons": { "128": "icon.png" }
+}
