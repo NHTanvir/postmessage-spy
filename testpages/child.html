@@ -1,0 +1,13 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>pms test — child</title></head>
+<body>
+<h2>child frame</h2>
+<script>
+// listener WITHOUT an origin check (should be flagged no-origin-check)
+window.onmessage = (e) => {
+  console.log('child got (unchecked):', e.data);
+  // echo a code param back to the opener/parent
+  (e.source || window.parent).postMessage('callback?code=abc12345def', '*');
+};
+</script>
+</body></html>
