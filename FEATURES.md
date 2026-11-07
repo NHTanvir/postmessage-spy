@@ -10,7 +10,15 @@
 - `wildcard-target` — outgoing message sent to `'*'` (or no target origin).
 - `jwt` / `token-like` — JWT, `access_token`/`id_token`/`code=`/session-like strings.
 - `email`, `user-id` — email address or user/tenant/org id in the payload.
-- `no-origin-check` — a message listener that never looks at `event.origin`.
+- `no-origin-check` / `weak-origin-check` — a listener that never checks
+  `event.origin`, or checks it with a bypassable method (indexOf/startsWith/
+  includes/search/match) or a loose regex (classified by `classifyOriginCheck`).
+- `oauth-code` — an OAuth `code`/`state`/`id_token`/`access_token` param in the payload.
+
+## Risk level
+Each message is scored `high` / `medium` / `low` via the triple-positive rule
+(secret payload × wildcard send × any weak/absent origin-check listener on the
+page). The panel shows a risk chip and a risk-threshold filter.
 
 ## Panel
 - Live per-tab list, newest first; filters (flagged only, by direction).
