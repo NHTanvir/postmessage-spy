@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>pms test — parent</title></head>
+<body>
+<h1>postMessage test parent</h1>
+<p>Open with the extension's host in scope. Exercises both directions, a
+wildcard target, a fake JWT, and listeners with and without an origin check.</p>
+<iframe id="f" src="child.html" style="width:300px;height:120px"></iframe>
+<button id="send">Send to iframe</button>
+<button id="pop">Open popup</button>
+<script>
+// listener WITH origin check
+window.addEventListener('message', (e) => {
+  if (e.origin !== location.origin) return;
+  console.log('parent got (checked):', e.data);
+});
+document.getElementById('send').onclick = () => {
+  document.getElementById('f').contentWindow.postMessage(
+    { type: 'login', access_token: 'eyJhbGciOi.eyJzdWIiOi.sigPART123', email: 'tester@example.com' }, '*');
+};
+document.getElementById('pop').onclick = () => {
+  const w = window.open('child.html', '_blank', 'width=320,height=160');
+  setTimeout(() => w && w.postMessage({ hello: 'popup', userId: 42 }, '*'), 400);
+};
+</script>
+</body></html>
