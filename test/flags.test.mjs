@@ -31,3 +31,17 @@ test('listener without origin check flagged', () => {
   assert.deepEqual(flagListener({ checksOrigin: false }), ['no-origin-check']);
   assert.deepEqual(flagListener({ checksOrigin: true }), []);
 });
+
+import { toMarkdown } from '../markdown.js';
+import { test as t2 } from 'node:test';
+import assert2 from 'node:assert/strict';
+
+t2('markdown highlights flagged messages and risky listeners', () => {
+  const md = toMarkdown({
+    events: [{ direction: 'out', targetOrigin: '*', data: { access_token: 'x' }, flags: ['wildcard-target', 'token-like'] }],
+    listeners: [{ frameUrl: 'https://x/', excerpt: 'e=>e.data', flags: ['no-origin-check'] }],
+  }, { host: 'x.com' });
+  assert2.ok(md.includes('Flagged messages'));
+  assert2.ok(md.includes('wildcard-target'));
+  assert2.ok(md.includes('without an origin check'));
+});

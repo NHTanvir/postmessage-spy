@@ -1,3 +1,4 @@
+import { toMarkdown } from './markdown.js';
 let tabId = null;
 let data = { events: [], listeners: [] };
 
@@ -65,9 +66,11 @@ document.getElementById('clear').addEventListener('click', async () => {
   await chrome.runtime.sendMessage({ type: 'pms-clear', tabId });
   refresh();
 });
-document.getElementById('copy').addEventListener('click', () => {
-  // real Markdown export lands in step 6
-  navigator.clipboard.writeText(JSON.stringify(data, null, 2)).catch(() => {});
+document.getElementById('copy').addEventListener('click', async () => {
+  let host = '';
+  try { const [t] = await chrome.tabs.query({ active: true, currentWindow: true }); host = new URL(t.url).host; } catch {}
+  const md = toMarkdown(data, { host, when: new Date().toISOString() });
+  navigator.clipboard.writeText(md).catch(() => {});
 });
 
 chrome.tabs.onActivated.addListener(async () => { tabId = await currentTab(); refresh(); });
