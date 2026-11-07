@@ -5,6 +5,7 @@ let data = { events: [], listeners: [] };
 const listEl = document.getElementById('list');
 const emptyEl = document.getElementById('empty');
 const flaggedOnly = document.getElementById('flaggedOnly');
+const riskSel = document.getElementById('risk');
 const dirSel = document.getElementById('dir');
 
 async function currentTab() {
@@ -19,9 +20,12 @@ function render() {
   const onlyFlagged = flaggedOnly.checked;
   const dir = dirSel.value;
   const rows = [];
+  const wantRisk = riskSel ? riskSel.value : '';
+  const rank = { none: 0, low: 1, medium: 2, high: 3 };
   for (const ev of data.events) {
     if (dir && ev.direction !== dir) continue;
     if (onlyFlagged && !(ev.flags && ev.flags.length)) continue;
+    if (wantRisk && rank[ev.risk || 'none'] < rank[wantRisk]) continue;
     rows.push({ t: ev.time, html: eventRow(ev) });
   }
   for (const ln of data.listeners) {
@@ -43,6 +47,7 @@ function eventRow(ev) {
   return `<div class="row">
     <div class="meta"><span class="dir ${ev.direction}">${ev.direction.toUpperCase()}</span>
     <span>${origin}</span><span>${esc(new URL(ev.frameUrl || 'about:blank').host || ev.frameUrl)}</span>
+    ${ev.risk && ev.risk !== 'none' ? `<span class="flag risk-${esc(ev.risk)}">${esc(ev.risk)} risk</span>` : ''}
     ${flagsHtml(ev.flags)}</div>
     <pre>${esc(pretty(ev.data))}</pre></div>`;
 }
@@ -62,6 +67,7 @@ async function refresh() {
 
 flaggedOnly.addEventListener('change', render);
 dirSel.addEventListener('change', render);
+if (riskSel) riskSel.addEventListener('change', render);
 document.getElementById('clear').addEventListener('click', async () => {
   await chrome.runtime.sendMessage({ type: 'pms-clear', tabId });
   refresh();

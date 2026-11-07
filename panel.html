@@ -15,6 +15,7 @@
   .dir.out { color: #c0640a; } .dir.in { color: #0a66c0; }
   .flags { display: flex; gap: 4px; flex-wrap: wrap; }
   .flag { background: #d33; color: #fff; border-radius: 3px; padding: 0 5px; font-size: 10px; }
+  .flag.risk-high { background: #a00; } .flag.risk-medium { background: #c0640a; } .flag.risk-low { background: #777; }
   pre { margin: 4px 0 0; white-space: pre-wrap; word-break: break-word; background: #8881; padding: 6px; border-radius: 4px; max-height: 180px; overflow: auto; }
   .listener { border-left: 3px solid #999; }
   #empty { padding: 20px; color: #888; }
@@ -25,6 +26,7 @@
   <h1>postMessage Spy</h1>
   <label><input type="checkbox" id="flaggedOnly"> flagged only</label>
   <select id="dir"><option value="">all</option><option value="out">outgoing</option><option value="in">incoming</option></select>
+  <select id="risk"><option value="">any risk</option><option value="low">low+</option><option value="medium">medium+</option><option value="high">high</option></select>
   <button id="copy">Copy MD</button>
   <button id="clear">Clear</button>
 </header>

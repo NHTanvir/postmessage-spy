@@ -1,5 +1,5 @@
 import { getScope, hostInScope } from './scope.js';
-import { flagEvent, flagListener } from './flags.js';
+import { flagEvent, flagListener, riskLevel } from './flags.js';
 
 const CAP = 500; // records kept per tab
 
@@ -37,6 +37,9 @@ async function append(tabId, record) {
     if (log.listeners.length > CAP) log.listeners.shift();
   } else {
     record.flags = flagEvent(record);
+    const anyWeakListener = log.listeners.some((l) =>
+      (l.flags || []).some((f) => f === 'no-origin-check' || f === 'weak-origin-check'));
+    record.risk = riskLevel(record.flags, anyWeakListener);
     log.events.push(record);
     if (log.events.length > CAP) log.events.shift();
   }
