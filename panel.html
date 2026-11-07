@@ -1,3 +1,35 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>postMessage Spy</title></head>
-<body><p>Side panel is built in step 5.</p></body></html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>postMessage Spy</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 13px system-ui, sans-serif; margin: 0; }
+  header { padding: 8px 10px; border-bottom: 1px solid #8884; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 14px; margin: 0 auto 0 0; }
+  button, select { font: inherit; padding: 3px 8px; cursor: pointer; }
+  .row { padding: 6px 10px; border-bottom: 1px solid #8882; }
+  .meta { display: flex; gap: 8px; align-items: center; font-size: 11px; color: #888; }
+  .dir { font-weight: 600; }
+  .dir.out { color: #c0640a; } .dir.in { color: #0a66c0; }
+  .flags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .flag { background: #d33; color: #fff; border-radius: 3px; padding: 0 5px; font-size: 10px; }
+  pre { margin: 4px 0 0; white-space: pre-wrap; word-break: break-word; background: #8881; padding: 6px; border-radius: 4px; max-height: 180px; overflow: auto; }
+  .listener { border-left: 3px solid #999; }
+  #empty { padding: 20px; color: #888; }
+</style>
+</head>
+<body>
+<header>
+  <h1>postMessage Spy</h1>
+  <label><input type="checkbox" id="flaggedOnly"> flagged only</label>
+  <select id="dir"><option value="">all</option><option value="out">outgoing</option><option value="in">incoming</option></select>
+  <button id="copy">Copy MD</button>
+  <button id="clear">Clear</button>
+</header>
+<div id="list"></div>
+<div id="empty">No messages captured on this tab yet. Add the host to scope in options, then reload the page.</div>
+<script src="panel.js"></script>
+</body>
+</html>
